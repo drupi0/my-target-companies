@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: 'app-home',
@@ -6,5 +7,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
+  constructor(private notifier: NotifierService) {}
 
+  save() {
+    this.notifier.notify('success', "HELLO");
+  }
+
+  clearForm() {
+    this.notifier.notify('error', "HELLO");
+  }
 }
