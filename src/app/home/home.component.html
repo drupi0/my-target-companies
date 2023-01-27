@@ -1,1 +1,30 @@
-<p>home works!</p>
+<form>
+    <div class="form-group">
+      <label for="exampleFormControlInput1">Company Name</label>
+      <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Company Name">
+    </div>
+    <div class="d-flex mt-3 mb-2">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="hasApplied">
+            <label class="form-check-label" for="hasApplied">
+                Has Applied
+            </label>
+        </div>
+    
+        <div class="form-check ms-3">
+            <input class="form-check-input" type="checkbox" value="" id="hasDeclined">
+            <label class="form-check-label" for="hasDeclined">
+                Application Declined
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+      <label for="exampleFormControlTextarea1">Remarks</label>
+      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    </div>
+  </form>
+<div class="d-flex justify-content-end mt-3">
+    <button class="btn btn-danger me-2">Clear Form</button>
+    <button class="btn btn-success">Save</button>
+</div>
