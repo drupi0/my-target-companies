@@ -10,22 +10,21 @@
             </div>
             <div class="d-flex mt-3 mb-2">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="companyList[index].hasApplied" id="hasApplied">
-                    <label class="form-check-label" for="hasApplied">
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="companyList[index].hasApplied">
+                    <label class="form-check-label">
                         Has Applied
                     </label>
                 </div>
                 <div class="form-check ms-3">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="companyList[index].hasApplicationDeclined"
-                        id="hasDeclined">
-                    <label class="form-check-label" for="hasDeclined">
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="companyList[index].hasApplicationDeclined">
+                    <label class="form-check-label">
                         Application Declined
                     </label>
                 </div>
             </div>
             <div class="d-flex justify-content-end mt-3">
-                <button class="btn btn-success me-2" (click)="update(index)">Update</button>
-                <button class="btn btn-danger" (click)="delete(index)">Delete</button>
+                <button class="btn btn-success me-2" (click)="update(company)">Update</button>
+                <button class="btn btn-danger" (click)="delete(company)">Delete</button>
             </div>
         </div>
     </div>

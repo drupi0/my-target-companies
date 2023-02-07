@@ -1,6 +1,7 @@
 export interface Company {
+    id?: string;
     name: string;
     remarks: string;
-    hasApplied: boolean,
+    hasApplied: boolean;
     hasApplicationDeclined: boolean;
 }

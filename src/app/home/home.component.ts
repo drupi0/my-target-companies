@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { NotifierService } from 'angular-notifier';
+import { Company } from '../interface/app-interface';
+import { EffectService } from '../state/effect.service';
 
 @Component({
   selector: 'app-home',
@@ -7,13 +8,30 @@ import { NotifierService } from 'angular-notifier';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  constructor(private notifier: NotifierService) {}
+  constructor(private effect: EffectService) {}
+
+  currentCompany: Company = {
+    name: "",
+    remarks: "",
+    hasApplied: false,
+    hasApplicationDeclined: false
+  };
+
 
   save() {
-    this.notifier.notify('success', "HELLO");
+    this.effect.saveCompany(this.currentCompany).subscribe((isSaved: boolean) => {
+      if(isSaved) {
+        this.clearForm();
+      }
+    });
   }
 
   clearForm() {
-    this.notifier.notify('error', "HELLO");
+    this.currentCompany = {
+      name: "",
+      remarks: "",
+      hasApplied: false,
+      hasApplicationDeclined: false
+    };
   }
 }

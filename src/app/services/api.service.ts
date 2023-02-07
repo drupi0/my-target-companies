@@ -4,9 +4,9 @@ import { catchError, EMPTY, from, map, Observable, of, Subject, switchMap } from
 import { Company } from '../interface/app-interface';
 
 interface ApiServiceModel {
-  saveCompany: (company: Company) => Observable<boolean>,
+  saveCompany: (company: Company) => Observable<Company>,
   getCompanies: () => Observable<Company[]>,
-  updateCompany: (company: Company) => Observable<boolean>;
+  updateCompany: (company: Company) => Observable<Company>;
 }
 
 const appConfigs = {
@@ -33,7 +33,7 @@ export class ApiService implements ApiServiceModel, OnDestroy {
     this.onDestroy$.complete();
   }
 
-  saveCompany(company: Company) {
+  saveCompany(company: Company): Observable<Company> {
     return from(this.database.createDocument(appConfigs.databaseId, appConfigs.collectionId, ID.unique(), company))
       .pipe(catchError((err) => {
         if (err) {
@@ -42,13 +42,20 @@ export class ApiService implements ApiServiceModel, OnDestroy {
 
         return EMPTY;
 
-      }), switchMap((response: Models.Document) => !response ? of(false) : of(true)));
+      }), map((object: Models.Document) => {
+
+        return {
+          ...object,
+          id: object.$id
+        } as unknown as Company
+      }));
   }
 
   getCompanies(): Observable<Company[]> {
     return from(this.database.listDocuments(appConfigs.databaseId, appConfigs.collectionId)).pipe(map((response: Models.DocumentList<Models.Document>) => {
       const { documents } = response;
       return documents.map(document => <Company>{
+        id: document.$id,
         name: document["name"],
         remarks: document["remarks"],
         hasApplied: document["hasApplied"],
@@ -57,8 +64,16 @@ export class ApiService implements ApiServiceModel, OnDestroy {
     }))
   }
 
-  updateCompany(company: Company) {
-    return from(this.database.updateDocument(appConfigs.databaseId, appConfigs.collectionId, ID.unique(), company))
+  updateCompany(company: Company): Observable<Company> {
+    if(!company.id) {
+      return EMPTY;
+    }
+
+    const appWriteObj: Partial<Company> = {...company};
+
+    delete appWriteObj.id;
+    
+    return from(this.database.updateDocument(appConfigs.databaseId, appConfigs.collectionId, company.id, appWriteObj))
       .pipe(catchError((err) => {
         if (err) {
           alert(err.message);
@@ -66,6 +81,28 @@ export class ApiService implements ApiServiceModel, OnDestroy {
 
         return EMPTY;
 
-      }), switchMap((response: Models.Document) => !response ? of(false) : of(true)));
+      }), map((object: Models.Document) => {
+
+        return {
+          ...object,
+          id: object.$id
+        } as unknown as Company
+      }));
+  }
+
+  deleteCompany(company: Company): Observable<boolean> {
+    if(!company.id) {
+      return EMPTY;
+    }
+
+    return from(this.database.deleteDocument(appConfigs.databaseId, 
+            appConfigs.collectionId, company.id)).pipe(catchError((err) => {
+              if (err) {
+                alert(err.message);
+              }
+      
+              return EMPTY;
+      
+            }), map((response: {}) => response !== null ? true : false ));
   }
 }
